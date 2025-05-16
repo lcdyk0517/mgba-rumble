@@ -99,6 +99,7 @@ static void GBAInit(void* cpu, struct mCPUComponent* component) {
 	GBASIOInit(&gba->sio);
 
 	GBAHardwareInit(&gba->memory.hw, NULL);
+	ChisCartridgeHardwareInit(&gba->memory.chishw, &gba->memory.hw);
 
 	gba->keysActive = 0;
 	gba->keysLast = 0x400;
@@ -403,6 +404,7 @@ bool GBALoadNull(struct GBA* gba) {
 		gba->cpu->memory.setActiveRegion(gba->cpu, gba->cpu->gprs[ARM_PC]);
 	}
 	GBAHardwareInit(&gba->memory.hw, &((uint16_t*) gba->memory.rom)[GPIO_REG_DATA >> 1]);
+	ChisCartridgeHardwareInit(&gba->memory.chishw, &gba->memory.hw);
 	return true;
 }
 
@@ -495,6 +497,7 @@ bool GBALoadROM(struct GBA* gba, struct VFile* vf) {
 		gba->cpu->memory.setActiveRegion(gba->cpu, gba->cpu->gprs[ARM_PC]);
 	}
 	GBAHardwareInit(&gba->memory.hw, &((uint16_t*) gba->memory.rom)[GPIO_REG_DATA >> 1]);
+	ChisCartridgeHardwareInit(&gba->memory.chishw, &gba->memory.hw);
 	GBAUnlCartDetect(gba);
 	// TODO: error check
 	return true;
